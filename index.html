@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Driver test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-7 form">
+          <form id="form-driver">
+            <h4 class="display-4">Student info:</h4>
+            <label for="firstname">First name:</label>
+            <input id="firstname" type="text" class="form-control" />
+            <label for="lastname">Last name:</label>
+            <input id="lastname" type="text" class="form-control" />
+            <label for="birth">Birth date:</label>
+            <input id="birth" type="date" class="form-control" />
+            <label for="gender">Gender:</label>
+            <select id="gender" class="form-control">
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+            </select>
+            <hr />
+            <h4 class="display-4">Marks:</h4>
+            <div id="tests">
+              <label for="test-1">Test 1:</label>
+              <input id="test-1" type="number" class="form-control" />
+            </div>
+            <br />
+            <button class="btn btn-info" type="button">Add test</button>
+            <div class="btn-group">
+              <button class="btn btn-danger" type="reset">Reset</button>
+              <button class="btn btn-success" type="submit" disabled>
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="col-5 result">
+          <p>Fullname:</p>
+          <p id="fullname-display"></p>
+          <p>Gender:</p>
+          <p id="gender-display"></p>
+          <p>Birth date:</p>
+          <p id="birth-display"></p>
+          <p>Average:</p>
+          <p id="average-display"></p>
+          <p>Info:</p>
+          <p id="info-display"></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
