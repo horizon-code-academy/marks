@@ -1,6 +1,6 @@
 // assign HTML tags to JS variables.
 const form = document.querySelector("#form-driver");
-const testsContrainer = document.querySelector("#tests");
+const tests = document.querySelector("#tests");
 // inputs
 const firstnameInput = document.querySelector("#firstname");
 const lastnameInput = document.querySelector("#lastname");
@@ -21,43 +21,62 @@ const submit = document.querySelector('button[type="submit"]');
  * @param {*} e evant dispatched by the form.
  */
 function validate(e) {
-  if (e) e.preventDefault();
+  if (e) {
+    e.preventDefault();
+  } else {
+    const person = JSON.parse(localStorage.getItem("person"));
+    const { firstname, lastname, birth, gender, marks } = person;
+    firstnameInput.value = firstname;
+    lastnameInput.value = lastname;
+    birthInput.value = birth;
+    genderInput.value = gender;
+    // remove ready mark input
+    tests.innerHTML = "";
+    // append local storage marks' input
+    for (let i = 0; i < marks.length; i += 1) {
+      addTest(marks[i]);
+    }
+  }
+  const marksInputs = document.querySelectorAll("input[id^='test-']");
   // set the info from inputs into a JS object.
   const person = {
     firstname: firstnameInput.value,
     lastname: lastnameInput.value,
     birth: birthInput.value,
     gender: genderInput.value,
-    marks: [...document.querySelectorAll("input[id^='test-']")].map((e) =>
-      parseFloat(e.value)
-    ),
+    marks: [...marksInputs]
+      .map((e) => parseFloat(e.value))
+      .filter((e) => e !== NaN),
   };
 
   // destruct object's properties to separate variables.
   const { firstname, lastname, birth, gender, marks } = person;
 
-  fullnameDisplay.innerHTML = `${firstname} ${lastname}`;
+  fullnameDisplay.innerHTML = `${
+    gender === "m" ? "M." : "Mm."
+  } ${firstname} ${lastname}`;
   birthDisplay.innerHTML = `${birth}`;
   genderDisplay.innerHTML = `${gender === "m" ? "Male" : "Female"}`;
-  // calculate the average (moyen)
-  const average = marks.reduce((t, e) => t + e, 0) / marks.length;
-  // show average and fix float to 2 numbers
-  averageDisplay.innerHTML = average.toFixed(2);
-  infoDisplay.innerHTML = `${average >= 10 ? "Succeded" : "Failed"}`;
+  if (marks.length > 0) {
+    // calculate the average (moyen)
+    const average = marks.reduce((t, e) => t + e, 0) / marks.length;
+    // show average and fix float to 2 numbers
+    averageDisplay.innerHTML = average.toFixed(2);
+    infoDisplay.innerHTML = `${average >= 10 ? "Succeded" : "Failed"}`;
 
-  // colorize the info
-  average < 10
-    ? (infoDisplay.style.color = "red")
-    : (infoDisplay.style.color = "green");
-
+    // colorize the info
+    average < 10
+      ? (infoDisplay.style.color = "red")
+      : (infoDisplay.style.color = "green");
+  }
   // save person object in localStorage
-  localStorage.setItem("person", JSON.stringify(person));
+  if (e) localStorage.setItem("person", JSON.stringify(person));
 }
 
 /**
  * Add test/mark input.
  */
-function addTest() {
+function addTest(value) {
   const markCount = document.querySelectorAll("input[id^='test-']").length;
   // create 'label' tag
   const newLabel = document.createElement("label");
@@ -69,9 +88,10 @@ function addTest() {
   newInput.id = `test-${markCount + 1}`;
   newInput.className = `form-control`;
   newInput.type = "number";
+  if (value) newInput.value = value;
   // add inputs and their labels
-  testsContrainer.appendChild(newLabel);
-  testsContrainer.appendChild(newInput);
+  tests.appendChild(newLabel);
+  tests.appendChild(newInput);
 }
 
 /**
@@ -92,15 +112,7 @@ addTestBtn.addEventListener("click", addTest);
 firstnameInput.addEventListener("change", enableDisableSubmit);
 lastnameInput.addEventListener("change", enableDisableSubmit);
 birthInput.addEventListener("change", enableDisableSubmit);
-genderInput.addEventListener("change", enableDisableSubmit);
-
-const localPerson = JSON.parse(localStorage.getItem("person"));
-
-const { firstname, lastname, birth, gender, marks } = localPerson;
-
-firstnameInput.value = firstname;
-lastnameInput.value = lastname;
-birthInput.value = birth;
-genderInput.value = gender;
 
 validate();
+
+enableDisableSubmit();
